@@ -1,24 +1,41 @@
-// Select color input
-let color = document.getElementById("colorPicker");
-// color.value = hex
-// Select size input
-// let height = document.getElementById("inputHeight").value;
-// let width = document.getElementById("inputWidth"),value;
-let pixelCanvas = document.getElementById("pixelCanvas");
-// When size is submitted by the user, call makeGrid()
-let ev = document.getElementById("submit");
-ev.addEventListener("click", function () {
-let height = document.getElementById("inputHeight").value;
-let width = document.getElementById("inputWidth").value;
-  makeGrid(height,width);
-});
-function makeGrid(height,width) {
-  // Your code goes here!
-  for (let i = 1; i <= height; i++) {
-    let gridRow = document.createElement("tr");
-    pixelCanvas.appendChild(gridRow);
-    for (let j = 1; j <= width; j++) {
-      let gridCell = document.createElement("td");
-      gridRow.appendChild(gridCell);
+document.getElementById("submit").addEventListener("click", formSubmission);
+
+function formSubmission(event) {
+  event.preventDefault();
+  const height = document.getElementById("inputHeight").value;
+  const width = document.getElementById("inputWidth").value;
+  makeGrid(height, width);
+}
+
+function makeGrid(height, width) {
+  const table = document.getElementById("pixelCanvas");
+  let grid = "";
+
+  // loop over each row
+  for (let i = 0; i < height; i++) {
+    grid += '<tr class="row-' + i + '">';
+    // loop for each cell
+    for (let j = 0; j < width; j++) {
+      grid += '<td class="cell" id="row-' + i + "_cell-" + j + '"></td>';
     }
-  }}
+    grid += "</tr>";
+  }
+  // add grid into table element
+  table.innerHTML = grid;
+
+  // Add click event to grid cells once the table grid has been created
+  addClickEventToCells();
+}
+
+function addClickEventToCells() {
+  const colorPicker = document.getElementById("colorPicker");
+  const cells = document.getElementsByClassName("cell");
+  for (let i = 0; i < cells.length; i++) {
+    cells[i].addEventListener("click", function (event) {
+      let clickedCell = event.target;
+      clickedCell.style.backgroundColor = colorPicker.value;
+    });
+  }
+}
+// default grid
+makeGrid(10, 10);
